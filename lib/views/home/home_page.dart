@@ -3,17 +3,13 @@ import 'package:get/get.dart';
 import 'package:medical_records/controllers/home/home_controller.dart';
 
 class HomePage extends GetView<HomeController> {
-  const HomePage({ Key? key }) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
-    appBar: AppBar(title: Text('HomePage')),
-
-    body: SafeArea(
-      child: MyForm())
-    );
+        appBar: AppBar(title: Text('HomePage')),
+        body: SafeArea(child: MyForm()));
   }
 }
 
@@ -27,14 +23,25 @@ class _MyFormState extends State<MyForm> {
   DateTime fixedDate = DateTime.now();
 
   // Drop-down options
-  List<String> dropdownOptions = ['Option 1', 'Option 2', 'Option 3'];
-  String selectedOption = 'Option 1';
+  List<String> dropdownOptions = ['Full Opd', 'Half Opd', 'No Opd'];
+  String selectedOption = 'Full Opd';
 
   // Text controllers for input boxes
   TextEditingController input1Controller = TextEditingController();
   TextEditingController input2Controller = TextEditingController();
   TextEditingController input3Controller = TextEditingController();
   TextEditingController input4Controller = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    input1Controller.text = '0';
+    input2Controller.text = '0';
+    input3Controller.text = '0';
+    input4Controller.text = '0';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +67,7 @@ class _MyFormState extends State<MyForm> {
                 });
               },
               decoration: InputDecoration(
-                labelText: 'Select an option',
+                labelText: 'Select an Opd',
               ),
             ),
             SizedBox(height: 16.0),
@@ -68,26 +75,28 @@ class _MyFormState extends State<MyForm> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('Card Title'),
+                    Text('0-15 Years'),
                     SizedBox(height: 16.0),
                     Row(
                       children: [
                         Expanded(
                           child: TextFormField(
+                            keyboardType: TextInputType.number,
                             controller: input1Controller,
                             decoration: InputDecoration(
-                              labelText: 'Input 1',
+                              labelText: 'Old Male',
                             ),
                           ),
                         ),
                         SizedBox(width: 16.0),
                         Expanded(
                           child: TextFormField(
+                            keyboardType: TextInputType.number,
                             controller: input2Controller,
                             decoration: InputDecoration(
-                              labelText: 'Input 2',
+                              labelText: 'Old Female',
                             ),
                           ),
                         ),
@@ -98,18 +107,20 @@ class _MyFormState extends State<MyForm> {
                       children: [
                         Expanded(
                           child: TextFormField(
+                            keyboardType: TextInputType.number,
                             controller: input3Controller,
                             decoration: InputDecoration(
-                              labelText: 'Input 3',
+                              labelText: 'New Male',
                             ),
                           ),
                         ),
                         SizedBox(width: 16.0),
                         Expanded(
                           child: TextFormField(
+                            keyboardType: TextInputType.number,
                             controller: input4Controller,
                             decoration: InputDecoration(
-                              labelText: 'Input 4',
+                              labelText: 'New Female',
                             ),
                           ),
                         ),
