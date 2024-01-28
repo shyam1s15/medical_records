@@ -19,29 +19,14 @@ class MyForm extends StatefulWidget {
 }
 
 class _MyFormState extends State<MyForm> {
+  HomeController controller = Get.find();
+
   // Date fixed from code
   DateTime fixedDate = DateTime.now();
 
   // Drop-down options
   List<String> dropdownOptions = ['Full Opd', 'Half Opd', 'No Opd'];
   String selectedOption = 'Full Opd';
-
-  // Text controllers for input boxes
-  TextEditingController input1Controller = TextEditingController();
-  TextEditingController input2Controller = TextEditingController();
-  TextEditingController input3Controller = TextEditingController();
-  TextEditingController input4Controller = TextEditingController();
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    input1Controller.text = '0';
-    input2Controller.text = '0';
-    input3Controller.text = '0';
-    input4Controller.text = '0';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +69,7 @@ class _MyFormState extends State<MyForm> {
                         Expanded(
                           child: TextFormField(
                             keyboardType: TextInputType.number,
-                            controller: input1Controller,
+                            controller: controller.inputControllers[0],
                             decoration: InputDecoration(
                               labelText: 'Old Male',
                             ),
@@ -94,7 +79,7 @@ class _MyFormState extends State<MyForm> {
                         Expanded(
                           child: TextFormField(
                             keyboardType: TextInputType.number,
-                            controller: input2Controller,
+                            controller: controller.inputControllers[1],
                             decoration: InputDecoration(
                               labelText: 'Old Female',
                             ),
@@ -108,7 +93,7 @@ class _MyFormState extends State<MyForm> {
                         Expanded(
                           child: TextFormField(
                             keyboardType: TextInputType.number,
-                            controller: input3Controller,
+                            controller: controller.inputControllers[2],
                             decoration: InputDecoration(
                               labelText: 'New Male',
                             ),
@@ -118,11 +103,85 @@ class _MyFormState extends State<MyForm> {
                         Expanded(
                           child: TextFormField(
                             keyboardType: TextInputType.number,
-                            controller: input4Controller,
+                            controller: controller.inputControllers[3],
                             decoration: InputDecoration(
                               labelText: 'New Female',
                             ),
                           ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 16.0),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Sums Information',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 16.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              'Sum Male',
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 8.0),
+                            Obx(() => Text(
+                                  '${controller.sumMale}',
+                                  style: TextStyle(fontSize: 18),
+                                )),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              'Sum Female',
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 8.0),
+                            Obx(() => Text(
+                                  '${controller.sumFemale}',
+                                  style: TextStyle(fontSize: 18),
+                                )),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              'Sum Old',
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 8.0),
+                            Obx(() => Text(
+                                  '${controller.sumOld}',
+                                  style: TextStyle(fontSize: 18),
+                                )),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              'Sum New',
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 8.0),
+                            Obx(() => Text(
+                                  '${controller.sumNew}',
+                                  style: TextStyle(fontSize: 18),
+                                )),
+                          ],
                         ),
                       ],
                     ),
