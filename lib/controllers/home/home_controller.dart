@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:medical_records/dtos/requestDtos/MedicalRecordModel.dart';
+import 'package:medical_records/models/response_model.dart';
+import 'package:medical_records/repositories/medical_repository.dart';
+import 'package:medical_records/shared/utils/date_utils.dart';
+import 'package:medical_records/shared/widgets/common_widgets.dart';
 
 class HomeController extends GetxController with StateMixin {
+  MedicalRepository medicalRepository = Get.find();
+
   // Text controllers for input boxes
   late List<TextEditingController> inputControllers;
   Set<int> oldSumSeq = {0, 1, 4, 5, 8, 9};
@@ -13,6 +20,14 @@ class HomeController extends GetxController with StateMixin {
   RxInt sumFemale = RxInt(0);
   RxInt sumOld = RxInt(0);
   RxInt sumNew = RxInt(0);
+
+  Map<String, int> dropdownItems = {
+    'Full Opd': 0,
+    'Half Opd': 1,
+    'No Opd': 2,
+  };
+
+  RxString opdSelected = "Full Opd".obs;
 
   @override
   void onInit() {
@@ -28,12 +43,16 @@ class HomeController extends GetxController with StateMixin {
     });
   }
 
+  void updateOpd(String? newValue) {
+    opdSelected.value = newValue ?? "Full Opd";
+  }
+
   void updateSum(TextEditingController controller) {
     sumMale.value = 0;
     sumFemale.value = 0;
     sumNew.value = 0;
     sumOld.value = 0;
-    
+
     for (int i = 0; i < 12; i++) {
       if (maleSumSeq.contains(i)) {
         sumMale.value += int.tryParse(inputControllers[i].text) ?? 0;
@@ -47,6 +66,43 @@ class HomeController extends GetxController with StateMixin {
       if (newSumSeq.contains(i)) {
         sumNew.value += int.tryParse(inputControllers[i].text) ?? 0;
       }
+    }
+  }
+
+  Future<void> onSave() async {
+    Group upto15 = Group(
+        name: "0-15 years",
+        oldMale: int.tryParse(inputControllers[0].text) ?? 0,
+        oldFemale: int.tryParse(inputControllers[1].text) ?? 0,
+        newMale: int.tryParse(inputControllers[2].text) ?? 0,
+        newFemale: int.tryParse(inputControllers[3].text) ?? 0);
+
+    Group upto60 = Group(
+        name: "15-60 years",
+        oldMale: int.tryParse(inputControllers[4].text) ?? 0,
+        oldFemale: int.tryParse(inputControllers[5].text) ?? 0,
+        newMale: int.tryParse(inputControllers[6].text) ?? 0,
+        newFemale: int.tryParse(inputControllers[7].text) ?? 0);
+
+    Group moreThan60 = Group(
+        name: "60+ years",
+        oldMale: int.tryParse(inputControllers[8].text) ?? 0,
+        oldFemale: int.tryParse(inputControllers[9].text) ?? 0,
+        newMale: int.tryParse(inputControllers[10].text) ?? 0,
+        newFemale: int.tryParse(inputControllers[11].text) ?? 0);
+
+    MedicalRecordModel requestModel = MedicalRecordModel(
+        groups: [upto15, upto60, moreThan60],
+        id: null,
+        opdDate: DateUtil.appBackendDate(DateTime.now()),
+        opdType: dropdownItems[opdSelected.value] ?? 0,
+        updatedAt: DateUtil.appBackendDate(DateTime.now()));
+
+    ResponseModel apiResp = await medicalRepository.saveRecord(requestModel);
+    if (apiResp.errorInfo.error > 0) {
+      CommonWidgets.snackBar("error", apiResp.errorInfo.message);
+    } else {
+      CommonWidgets.showSuccessToast("Success", "Data Saved Successfully");
     }
   }
 

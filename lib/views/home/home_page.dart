@@ -26,30 +26,27 @@ class _MyFormState extends State<MyForm> {
 
   // Drop-down options
   List<String> dropdownOptions = ['Full Opd', 'Half Opd', 'No Opd'];
-  String selectedOption = 'Full Opd';
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Form(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
+          //crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Fixed Date: ${fixedDate.toLocal()}'),
             SizedBox(height: 16.0),
             DropdownButtonFormField<String>(
-              value: selectedOption,
-              items: dropdownOptions.map((option) {
+              value: controller.opdSelected.value,
+              items: controller.dropdownItems.keys.map((option) {
                 return DropdownMenuItem<String>(
                   value: option,
                   child: Text(option),
                 );
               }).toList(),
               onChanged: (value) {
-                setState(() {
-                  selectedOption = value!;
-                });
+                controller.updateOpd(value);
               },
               decoration: InputDecoration(
                 labelText: 'Select an Opd',
@@ -104,6 +101,126 @@ class _MyFormState extends State<MyForm> {
                           child: TextFormField(
                             keyboardType: TextInputType.number,
                             controller: controller.inputControllers[3],
+                            decoration: InputDecoration(
+                              labelText: 'New Female',
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 16.0),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('15-60 Years'),
+                    SizedBox(height: 16.0),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            controller: controller.inputControllers[4],
+                            decoration: InputDecoration(
+                              labelText: 'Old Male',
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 16.0),
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            controller: controller.inputControllers[5],
+                            decoration: InputDecoration(
+                              labelText: 'Old Female',
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16.0),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            controller: controller.inputControllers[6],
+                            decoration: InputDecoration(
+                              labelText: 'New Male',
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 16.0),
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            controller: controller.inputControllers[7],
+                            decoration: InputDecoration(
+                              labelText: 'New Female',
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 16.0),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('60+ Years'),
+                    SizedBox(height: 16.0),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            controller: controller.inputControllers[8],
+                            decoration: InputDecoration(
+                              labelText: 'Old Male',
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 16.0),
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            controller: controller.inputControllers[9],
+                            decoration: InputDecoration(
+                              labelText: 'Old Female',
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16.0),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            controller: controller.inputControllers[10],
+                            decoration: InputDecoration(
+                              labelText: 'New Male',
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 16.0),
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            controller: controller.inputControllers[11],
                             decoration: InputDecoration(
                               labelText: 'New Female',
                             ),
@@ -193,7 +310,7 @@ class _MyFormState extends State<MyForm> {
             ElevatedButton(
               onPressed: () {
                 // Handle form submission here
-                print('Form Submitted');
+                controller.onSave();
               },
               child: Text('Submit'),
             ),

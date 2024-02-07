@@ -1,18 +1,28 @@
+import 'dart:convert';
 
-class ResponseModel {
-  dynamic content;
+class ResponseModel<T> {
+  T content;
   ErrorInfo errorInfo;
 
-  ResponseModel({this.content, required this.errorInfo});
+  ResponseModel({required this.content, required this.errorInfo});
 
-  ResponseModel.fromJson(Map<String, dynamic> json) :
-    this.content = json['content'],
-    this.errorInfo = ErrorInfo.fromJson(json['response']);
+  factory ResponseModel.fromJson(Map<String, dynamic> json, T Function(dynamic json) fromJson) {
+    // Parse error info
+    ErrorInfo errorInfo = ErrorInfo.fromJson(json['response']);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['content'] = this.content;
-    data['error'] = this.errorInfo;
+    // Parse content based on its type
+    dynamic parsedContent = fromJson(json['content']);
+
+    return ResponseModel<T>(
+      content: parsedContent,
+      errorInfo: errorInfo,
+    );
+  }
+
+  Map<String, dynamic> toJson(Map<String, dynamic> Function(T content) toJson) {
+    final Map<String, dynamic> data = {};
+    data['content'] = toJson(this.content);
+    data['response'] = this.errorInfo.toJson();
     return data;
   }
 }

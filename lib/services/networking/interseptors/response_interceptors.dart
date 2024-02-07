@@ -7,18 +7,21 @@ import 'dart:convert';
 
 FutureOr<dynamic> responseInterceptor(
     Request request, Response response) async {
-  return handelResponse(response);
+  //return handelResponse(response);
+  return response;
 }
 
-ResponseModel handelResponse(Response response) {
+dynamic handelResponse(Response response) {
   print('RESPONSE START /////////////////');
   print('               Status Code: ${response.statusCode}');
   print('               Body: ${response.body}');
   print('RESPONSE END /////////////////');
-  
+
   switch (response.statusCode) {
-    case 200: {
-        return ResponseModel.fromJson(jsonDecode(response.body));
+    case 200:
+      {
+        return response;
+        //return ResponseModel.fromJson(jsonDecode(response.body));
       }
     default:
       CommonWidgets.snackBar('error',

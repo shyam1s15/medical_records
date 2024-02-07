@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:medical_records/dtos/requestDtos/MedicalRecordModel.dart';
+import 'package:medical_records/models/response_model.dart';
 import 'package:medical_records/services/networking/base_provider.dart';
 import 'package:medical_records/shared/typedef.dart';
 
@@ -14,23 +18,20 @@ class ApiService {
   }) async {
     var customHeaders = {
       'Accept': 'application/json',
-      requiresAuthToken ? 'Authorization': '' : '',
+      requiresAuthToken ? 'Authorization' : '': '',
     };
 
     if (headers != null) {
       customHeaders.addAll(headers);
     }
 
-    final response = await _baseProvider.get(
-      endpoint,
-      headers: customHeaders,
-      query: query
-    );
+    final response =
+        await _baseProvider.get(endpoint, headers: customHeaders, query: query);
 
     return response.body;
   }
 
-  Future<JSON> post<T>({
+  Future<ResponseModel<T>> post<T>(T Function(dynamic json) fromJson, {
     required String endpoint,
     JSON? body,
     JSON? query,
@@ -39,21 +40,23 @@ class ApiService {
   }) async {
     var customHeaders = {
       'Accept': 'application/json',
-      requiresAuthToken ? 'Authorization': '' : '',
+      if (requiresAuthToken) 'Authorization': '',
+      'Access-Control-Allow-Origin': '*', // Allow requests from any origin
+      'Access-Control-Allow-Methods': 'OPTIONS, GET, PUT, POST, DELETE, OPTIONS', // Specify allowed methods
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization', // Specify allowed request headers
     };
 
     if (headers != null) {
       customHeaders.addAll(headers);
     }
 
-    final response = await _baseProvider.post(
-      endpoint,
-      body,
-      headers: customHeaders,
-      query: query
-    );
+    final response = await _baseProvider.post(endpoint, body,
+        headers: customHeaders, query: query);
+          //dynamic responseBody = json.decode(response.body);
 
-    return response.body;
+    //return response.body;
+    ResponseModel<T> apiResp = ResponseModel.fromJson(response.body, fromJson);
+    return apiResp;
   }
 
   Future<JSON> put<T>({
@@ -65,23 +68,19 @@ class ApiService {
   }) async {
     var customHeaders = {
       'Accept': 'application/json',
-      requiresAuthToken ? 'Authorization': '' : '',
+      requiresAuthToken ? 'Authorization' : '': '',
     };
 
     if (headers != null) {
       customHeaders.addAll(headers);
     }
 
-    final response = await _baseProvider.put(
-      endpoint,
-      body,
-      headers: customHeaders,
-      query: query
-    );
+    final response = await _baseProvider.put(endpoint, body,
+        headers: customHeaders, query: query);
 
     return response.body;
   }
-  
+
   Future<JSON> delete<T>({
     required String endpoint,
     JSON? body,
@@ -91,18 +90,15 @@ class ApiService {
   }) async {
     var customHeaders = {
       'Accept': 'application/json',
-      requiresAuthToken ? 'Authorization': '' : '',
+      requiresAuthToken ? 'Authorization' : '': '',
     };
 
     if (headers != null) {
       customHeaders.addAll(headers);
     }
 
-    final response = await _baseProvider.delete(
-      endpoint,
-      headers: customHeaders,
-      query: query
-    );
+    final response = await _baseProvider.delete(endpoint,
+        headers: customHeaders, query: query);
 
     return response.body;
   }

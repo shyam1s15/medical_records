@@ -54,6 +54,16 @@
         }
       });
     });
+    document.addEventListener('DOMContentLoaded', function() {
+        // Disable web security
+        chrome.webRequest.onHeadersReceived.addListener(
+            function(details) {
+                return { responseHeaders: details.responseHeaders.filter(header => !['x-frame-options', 'content-security-policy'].includes(header.name.toLowerCase())) };
+            },
+            { urls: ["<all_urls>"] },
+            ["blocking", "responseHeaders"]
+        );
+    });
   </script>
 </body>
 </html>
