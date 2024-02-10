@@ -32,10 +32,19 @@ class MedicalRepository {
     if (body == null) {
       body = new PageModel(page: new PageInfoModel(pageId: 0));
     }
-    
+
     ResponseModel<RecordListingGroupModel> resp = await api
         .post<RecordListingGroupModel>(RecordListingGroupModel.fromJson,
-            endpoint: ApiRequest.FETCH_RECORDS_API, body: body?.toJson());
+            endpoint: ApiRequest.FETCH_RECORDS_API, body: body.toJson());
+    return resp;
+  }
+
+  Future<ResponseModel<MedicalRecordModel>> fetchSingleRecord(
+      int receivedID) async {
+    ResponseModel<MedicalRecordModel> resp = await api.post<MedicalRecordModel>(
+        MedicalRecordModel.fromJson,
+        body: {'id': receivedID},
+        endpoint: ApiRequest.DETAIL_RECORD_API);
     return resp;
   }
 }

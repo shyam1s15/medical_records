@@ -35,6 +35,9 @@ class Routes{
       name: RECORDS, 
       page: () => RecordListingPage(),
       binding: RecordListingBinding(),
+      middlewares: [
+        PlatformMiddleware(priority: 0)
+      ]
     )
   ];
 }

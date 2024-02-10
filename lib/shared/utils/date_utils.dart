@@ -11,4 +11,9 @@ class DateUtil {
         DateFormat('EEE, dd MMM yyyy HH:mm:ss \'GMT\'').format(d);
     return formattedDate;
   }
+
+  static DateTime appDateTimeFromString(String s) {
+    String format = 'EEE, dd MMM yyyy HH:mm:ss zzz';
+    return DateFormat(format).parse(s); 
+  }
 }

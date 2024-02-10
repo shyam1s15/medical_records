@@ -4,7 +4,9 @@ import 'package:medical_records/dtos/requestDtos/MedicalRecordModel.dart';
 import 'package:medical_records/dtos/responseDtos/string_response_dto.dart';
 import 'package:medical_records/models/response_model.dart';
 import 'package:medical_records/repositories/medical_repository.dart';
+import 'package:medical_records/shared/utils/Utility.dart';
 import 'package:medical_records/shared/utils/date_utils.dart';
+import 'package:medical_records/shared/utils/object_utils.dart';
 import 'package:medical_records/shared/widgets/common_widgets.dart';
 
 class HomeController extends GetxController with StateMixin {
@@ -21,6 +23,9 @@ class HomeController extends GetxController with StateMixin {
   RxInt sumFemale = RxInt(0);
   RxInt sumOld = RxInt(0);
   RxInt sumNew = RxInt(0);
+
+  int? recordId = null;
+  Rx<DateTime> opdDate = Rx<DateTime>(DateTime.now());
 
   Map<String, int> dropdownItems = {
     'Full Opd': 0,
@@ -42,6 +47,11 @@ class HomeController extends GetxController with StateMixin {
       });
       return controller;
     });
+    // Fetch data based on the received ID
+    var receivedID = Get.arguments['id']; // Get the ID from Get arguments
+    if (receivedID != null) {
+      fetchDetailedRecord(ObjectUtil.optInteger(receivedID, 0));
+    }
   }
 
   void updateOpd(String? newValue) {
@@ -94,8 +104,8 @@ class HomeController extends GetxController with StateMixin {
 
     MedicalRecordModel requestModel = MedicalRecordModel(
         groups: [upto15, upto60, moreThan60],
-        id: null,
-        opdDate: DateUtil.appBackendDate(DateTime.now()),
+        id: recordId,
+        opdDate: DateUtil.appBackendDate(opdDate.value),
         opdType: dropdownItems[opdSelected.value] ?? 0,
         updatedAt: DateUtil.appBackendDate(DateTime.now()));
 
@@ -117,5 +127,39 @@ class HomeController extends GetxController with StateMixin {
       controller.dispose();
     });
     super.onClose();
+  }
+
+  void fetchDetailedRecord(int receivedID) async {
+    ResponseModel<MedicalRecordModel> apiResp = await medicalRepository
+        .fetchSingleRecord(receivedID); // Example function to fetch data
+
+    // Update inputControllers based on the fetched data
+    if (apiResp.errorInfo.error > 0) {
+    } else {
+      recordId = apiResp.content.id;
+      opdDate.value = DateUtil.appDateTimeFromString(apiResp.content.opdDate);
+      //for (var i = 0; i < inputControllers.length; i++) {
+      // Populate inputControllers with data from responseData
+      //inputControllers[i].text = apiResp.content.groups[i].toString();
+      //}
+      apiResp.content.groups.forEach((record) {
+        if (Utility.equalIgnoreCase(record.name, "0-15 years")) {
+          inputControllers[0].text = record.oldMale.toString();
+          inputControllers[1].text = record.oldFemale.toString();
+          inputControllers[2].text = record.newMale.toString();
+          inputControllers[3].text = record.newFemale.toString();
+        } else if (Utility.equalIgnoreCase(record.name, "15-60 years")) {
+          inputControllers[0].text = record.oldMale.toString();
+          inputControllers[1].text = record.oldFemale.toString();
+          inputControllers[2].text = record.newMale.toString();
+          inputControllers[3].text = record.newFemale.toString();
+        } else if (Utility.equalIgnoreCase(record.name, "60+ years")) {
+          inputControllers[0].text = record.oldMale.toString();
+          inputControllers[1].text = record.oldFemale.toString();
+          inputControllers[2].text = record.newMale.toString();
+          inputControllers[3].text = record.newFemale.toString();
+        }
+      });
+    }
   }
 }

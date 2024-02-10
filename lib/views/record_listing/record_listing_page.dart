@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:medical_records/controllers/record_listing/record_listing_controller.dart';
+import 'package:medical_records/routes/routes.dart';
 import 'package:medical_records/shared/utils/Utility.dart';
 import 'package:medical_records/shared/widgets/custom_button.dart';
 
@@ -64,12 +65,18 @@ class RecordListingWidget extends StatelessWidget {
                 DataCell(Text('${data.opd_type}')),
                 DataCell(Text('${data.old_total}')),
                 DataCell(Text('${data.new_total}')),
-                DataCell(CustomButton(text: 'Action',color: Colors.green , onPressed: () {},)),
+                DataCell(CustomButton(
+                  text: 'Action',
+                  color: Colors.green,
+                  onPressed: () {
+                    print(data.id);
+                    Get.toNamed(Routes.INITIAL, arguments: {'id': data.id});
+                  },
+                )),
               ]);
             }).toList(),
           ),
         ),
-        
       ],
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:medical_records/controllers/home/home_controller.dart';
+import 'package:medical_records/shared/utils/Utility.dart';
 
 class HomePage extends GetView<HomeController> {
   const HomePage({Key? key}) : super(key: key);
@@ -35,7 +36,7 @@ class _MyFormState extends State<MyForm> {
         child: ListView(
           //crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Fixed Date: ${fixedDate.toLocal()}'),
+            Obx(() =>  Text('Fixed Date: ${Utility.appDisplayDate(controller.opdDate.value)}'),),
             SizedBox(height: 16.0),
             DropdownButtonFormField<String>(
               value: controller.opdSelected.value,
