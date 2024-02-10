@@ -25,7 +25,7 @@ class App extends StatelessWidget {
       darkTheme: Themes.darkTheme,
       themeMode: getThemeMode(themeController.theme),
       getPages: Routes.routes,
-      initialRoute: Routes.INITIAL,
+      initialRoute: Routes.RECORDS,
       initialBinding: AppBinding(),
     );
   }

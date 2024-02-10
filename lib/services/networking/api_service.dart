@@ -31,7 +31,8 @@ class ApiService {
     return response.body;
   }
 
-  Future<ResponseModel<T>> post<T>(T Function(dynamic json) fromJson, {
+  Future<ResponseModel<T>> post<T>(
+    T Function(Map<String, dynamic> json) fromJson, {
     required String endpoint,
     JSON? body,
     JSON? query,
@@ -42,8 +43,10 @@ class ApiService {
       'Accept': 'application/json',
       if (requiresAuthToken) 'Authorization': '',
       'Access-Control-Allow-Origin': '*', // Allow requests from any origin
-      'Access-Control-Allow-Methods': 'OPTIONS, GET, PUT, POST, DELETE, OPTIONS', // Specify allowed methods
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization', // Specify allowed request headers
+      'Access-Control-Allow-Methods':
+          'OPTIONS, GET, PUT, POST, DELETE, OPTIONS', // Specify allowed methods
+      'Access-Control-Allow-Headers':
+          'Content-Type, Authorization', // Specify allowed request headers
     };
 
     if (headers != null) {
@@ -52,9 +55,9 @@ class ApiService {
 
     final response = await _baseProvider.post(endpoint, body,
         headers: customHeaders, query: query);
-          //dynamic responseBody = json.decode(response.body);
+    //dynamic responseBody = json.decode(response.body);
 
-    //return response.body;
+    // return response.body;
     ResponseModel<T> apiResp = ResponseModel.fromJson(response.body, fromJson);
     return apiResp;
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:medical_records/dtos/requestDtos/MedicalRecordModel.dart';
+import 'package:medical_records/dtos/responseDtos/string_response_dto.dart';
 import 'package:medical_records/models/response_model.dart';
 import 'package:medical_records/repositories/medical_repository.dart';
 import 'package:medical_records/shared/utils/date_utils.dart';
@@ -98,7 +99,8 @@ class HomeController extends GetxController with StateMixin {
         opdType: dropdownItems[opdSelected.value] ?? 0,
         updatedAt: DateUtil.appBackendDate(DateTime.now()));
 
-    ResponseModel apiResp = await medicalRepository.saveRecord(requestModel);
+    ResponseModel<StringResponseModel> apiResp =
+        await medicalRepository.saveRecord(requestModel);
     if (apiResp.errorInfo.error > 0) {
       CommonWidgets.snackBar("error", apiResp.errorInfo.message);
     } else {

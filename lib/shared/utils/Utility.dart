@@ -9,4 +9,16 @@ class Utility {
     }
     return a.toLowerCase() == b.toLowerCase();
   }
+
+  static bool nonNullNonEmpty(List<dynamic>? list) {
+    return list != null && list.length > 0;
+  }
+
+  static String appDisplayDate(DateTime dateTime) {
+    String day = dateTime.day.toString().padLeft(2, '0');
+    String month = dateTime.month.toString().padLeft(2, '0');
+    String year = dateTime.year.toString();
+    
+    return '$day/ $month/ $year';
+  }
 }

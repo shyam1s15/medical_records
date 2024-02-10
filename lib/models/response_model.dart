@@ -6,13 +6,18 @@ class ResponseModel<T> {
 
   ResponseModel({required this.content, required this.errorInfo});
 
-  factory ResponseModel.fromJson(Map<String, dynamic> json, T Function(dynamic json) fromJson) {
+  factory ResponseModel.fromJson(Map<String, dynamic> json,
+      T Function(Map<String, dynamic> json) fromJson) {
     // Parse error info
     ErrorInfo errorInfo = ErrorInfo.fromJson(json['response']);
 
-    // Parse content based on its type
-    dynamic parsedContent = fromJson(json['content']);
+    dynamic parsedContent = null;
 
+    if (json['content'] is String) {
+      parsedContent = fromJson(json);
+    } else {
+      parsedContent = fromJson(json['content']);
+    }
     return ResponseModel<T>(
       content: parsedContent,
       errorInfo: errorInfo,
