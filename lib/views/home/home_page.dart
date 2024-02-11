@@ -23,7 +23,7 @@ class _MyFormState extends State<MyForm> {
   HomeController controller = Get.find();
 
   // Date fixed from code
-  DateTime fixedDate = DateTime.now();
+  //DateTime fixedDate = DateTime.now();
 
   // Drop-down options
   List<String> dropdownOptions = ['Full Opd', 'Half Opd', 'No Opd'];
@@ -45,10 +45,16 @@ class _MyFormState extends State<MyForm> {
         child: ListView(
           //crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Obx(
-              () => Text(
-                  'Fixed Date: ${Utility.appDisplayDate(controller.opdDate.value)}'),
-            ),
+            Get.arguments?['new_opd'] ?? false
+                ? Obx(() => ElevatedButton(
+                      onPressed: () => _selectOpdDate(context),
+                      child: Text(
+                          Utility.appDisplayDate(controller.opdDate.value)),
+                    ))
+                : Obx(
+                    () => Text(
+                        'Fixed Date: ${Utility.appDisplayDate(controller.opdDate.value)}'),
+                  ),
             SizedBox(height: 16.0),
             DropdownButtonFormField<String>(
               value: controller.opdSelected.value,
@@ -341,6 +347,7 @@ class _MyFormState extends State<MyForm> {
         ),
       ),
     );
+    
   }
 
   Widget _isLoading() {
@@ -349,5 +356,16 @@ class _MyFormState extends State<MyForm> {
         child: CircularProgressIndicator(),
       ),
     );
+  }
+
+  Future<void> _selectOpdDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: controller.opdDate.value,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != controller.opdDate.value) {
+      controller.updateOpdDate(picked);
+    }
   }
 }

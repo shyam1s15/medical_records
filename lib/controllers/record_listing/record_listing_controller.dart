@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:medical_records/dtos/requestDtos/page_dto.dart';
 import 'package:medical_records/dtos/responseDtos/record_listing_dto.dart';
 import 'package:medical_records/models/response_model.dart';
 import 'package:medical_records/repositories/medical_repository.dart';
@@ -17,17 +18,26 @@ class RecordListingController extends GetxController with StateMixin {
   }
 
   void fetchRecords() async {
+    print("called once");
     change(null, status: RxStatus.loading());
 
-    ResponseModel<RecordListingGroupModel> apiResp =
-        await medicalRepository.fetchRecords(null);
-    if (apiResp.errorInfo.error > 0) {
-      CommonWidgets.snackBar("error", apiResp.errorInfo.message);
-    } else {
-      if (Utility.nonNullNonEmpty(apiResp.content.recordList)) {
-        records.addAll(apiResp.content.recordList);
-        change(records, status: RxStatus.success());
+    int pageId = 0;
+    while (true && pageId < 10) {
+      ResponseModel<RecordListingGroupModel> apiResp = await medicalRepository
+          .fetchRecords(new PageModel(page: new PageInfoModel(pageId: pageId)));
+
+      if (apiResp.errorInfo.error > 0) {
+        CommonWidgets.snackBar("error", apiResp.errorInfo.message);
+        break;
+      } else {
+        if (Utility.nonNullNonEmpty(apiResp.content.recordList)) {
+          records.addAll(apiResp.content.recordList);
+          pageId += 1;
+        } else {
+          break;
+        }
       }
     }
+    change(records, status: RxStatus.success());
   }
 }

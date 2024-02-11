@@ -172,4 +172,8 @@ class HomeController extends GetxController with StateMixin {
       change(inputControllers, status: RxStatus.success());
     }
   }
+
+  void updateOpdDate(DateTime picked) {
+      opdDate.value = picked;
+  }
 }
