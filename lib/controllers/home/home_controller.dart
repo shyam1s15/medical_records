@@ -13,7 +13,7 @@ class HomeController extends GetxController with StateMixin {
   MedicalRepository medicalRepository = Get.find();
 
   // Text controllers for input boxes
-  late List<TextEditingController> inputControllers;
+  final inputControllers = <TextEditingController>[].obs;
   Set<int> oldSumSeq = {0, 1, 4, 5, 8, 9};
   Set<int> newSumSeq = {2, 3, 6, 7, 10, 11};
   Set<int> maleSumSeq = {0, 2, 4, 6, 8, 10};
@@ -39,18 +39,29 @@ class HomeController extends GetxController with StateMixin {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    inputControllers = List.generate(12, (index) {
+    change(null, status: RxStatus.loading());
+    /*inputControllers = List.generate(12, (index) {
       var controller = TextEditingController();
       controller.text = '0'; // Set default value '0'
       controller.addListener(() {
         updateSum(controller); // Update the sum for the specific controller
       });
       return controller;
-    });
+    });*/
+    inputControllers.assignAll(List.generate(12, (index) {
+      var controller = TextEditingController();
+      controller.text = '0'; // Set default value '0'
+      controller.addListener(() {
+        updateSum(controller); // Update the sum for the specific controller
+      });
+      return controller;
+    }));
     // Fetch data based on the received ID
-    var receivedID = Get.arguments['id']; // Get the ID from Get arguments
+    var receivedID = Get.arguments?['id']; // Get the ID from Get arguments
     if (receivedID != null) {
       fetchDetailedRecord(ObjectUtil.optInteger(receivedID, 0));
+    } else {
+      change(inputControllers, status: RxStatus.success());
     }
   }
 
@@ -130,6 +141,7 @@ class HomeController extends GetxController with StateMixin {
   }
 
   void fetchDetailedRecord(int receivedID) async {
+    change(null, status: RxStatus.loading());
     ResponseModel<MedicalRecordModel> apiResp = await medicalRepository
         .fetchSingleRecord(receivedID); // Example function to fetch data
 
@@ -138,28 +150,26 @@ class HomeController extends GetxController with StateMixin {
     } else {
       recordId = apiResp.content.id;
       opdDate.value = DateUtil.appDateTimeFromString(apiResp.content.opdDate);
-      //for (var i = 0; i < inputControllers.length; i++) {
-      // Populate inputControllers with data from responseData
-      //inputControllers[i].text = apiResp.content.groups[i].toString();
-      //}
       apiResp.content.groups.forEach((record) {
+        print(record.name);
         if (Utility.equalIgnoreCase(record.name, "0-15 years")) {
           inputControllers[0].text = record.oldMale.toString();
           inputControllers[1].text = record.oldFemale.toString();
           inputControllers[2].text = record.newMale.toString();
           inputControllers[3].text = record.newFemale.toString();
         } else if (Utility.equalIgnoreCase(record.name, "15-60 years")) {
-          inputControllers[0].text = record.oldMale.toString();
-          inputControllers[1].text = record.oldFemale.toString();
-          inputControllers[2].text = record.newMale.toString();
-          inputControllers[3].text = record.newFemale.toString();
+          inputControllers[4].text = record.oldMale.toString();
+          inputControllers[5].text = record.oldFemale.toString();
+          inputControllers[6].text = record.newMale.toString();
+          inputControllers[7].text = record.newFemale.toString();
         } else if (Utility.equalIgnoreCase(record.name, "60+ years")) {
-          inputControllers[0].text = record.oldMale.toString();
-          inputControllers[1].text = record.oldFemale.toString();
-          inputControllers[2].text = record.newMale.toString();
-          inputControllers[3].text = record.newFemale.toString();
+          inputControllers[8].text = record.oldMale.toString();
+          inputControllers[9].text = record.oldFemale.toString();
+          inputControllers[10].text = record.newMale.toString();
+          inputControllers[11].text = record.newFemale.toString();
         }
       });
+      change(inputControllers, status: RxStatus.success());
     }
   }
 }

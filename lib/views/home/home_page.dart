@@ -9,7 +9,7 @@ class HomePage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('HomePage')),
+        appBar: AppBar(title: const Text('HomePage')),
         body: SafeArea(child: MyForm()));
   }
 }
@@ -30,13 +30,25 @@ class _MyFormState extends State<MyForm> {
 
   @override
   Widget build(BuildContext context) {
+    return controller.obx((state) {
+      if (state == null) {
+        return _isLoading();
+      }
+      return _build(context: context);
+    }, onLoading: _isLoading());
+  }
+
+  Widget _build({required BuildContext context}) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Form(
         child: ListView(
           //crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Obx(() =>  Text('Fixed Date: ${Utility.appDisplayDate(controller.opdDate.value)}'),),
+            Obx(
+              () => Text(
+                  'Fixed Date: ${Utility.appDisplayDate(controller.opdDate.value)}'),
+            ),
             SizedBox(height: 16.0),
             DropdownButtonFormField<String>(
               value: controller.opdSelected.value,
@@ -65,21 +77,25 @@ class _MyFormState extends State<MyForm> {
                     Row(
                       children: [
                         Expanded(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            controller: controller.inputControllers[0],
-                            decoration: InputDecoration(
-                              labelText: 'Old Male',
+                          child: Obx(
+                            () => TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: controller.inputControllers[0],
+                              decoration: InputDecoration(
+                                labelText: 'Old Male',
+                              ),
                             ),
                           ),
                         ),
                         SizedBox(width: 16.0),
                         Expanded(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            controller: controller.inputControllers[1],
-                            decoration: InputDecoration(
-                              labelText: 'Old Female',
+                          child: Obx(
+                            () => TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: controller.inputControllers[1],
+                              decoration: InputDecoration(
+                                labelText: 'Old Female',
+                              ),
                             ),
                           ),
                         ),
@@ -89,21 +105,25 @@ class _MyFormState extends State<MyForm> {
                     Row(
                       children: [
                         Expanded(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            controller: controller.inputControllers[2],
-                            decoration: InputDecoration(
-                              labelText: 'New Male',
+                          child: Obx(
+                            () => TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: controller.inputControllers[2],
+                              decoration: InputDecoration(
+                                labelText: 'New Male',
+                              ),
                             ),
                           ),
                         ),
                         SizedBox(width: 16.0),
                         Expanded(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            controller: controller.inputControllers[3],
-                            decoration: InputDecoration(
-                              labelText: 'New Female',
+                          child: Obx(
+                            () => TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: controller.inputControllers[3],
+                              decoration: InputDecoration(
+                                labelText: 'New Female',
+                              ),
                             ),
                           ),
                         ),
@@ -125,23 +145,25 @@ class _MyFormState extends State<MyForm> {
                     Row(
                       children: [
                         Expanded(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            controller: controller.inputControllers[4],
-                            decoration: InputDecoration(
-                              labelText: 'Old Male',
+                          child: Obx(
+                            () => TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: controller.inputControllers[4],
+                              decoration: InputDecoration(
+                                labelText: 'Old Male',
+                              ),
                             ),
                           ),
                         ),
                         SizedBox(width: 16.0),
                         Expanded(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            controller: controller.inputControllers[5],
-                            decoration: InputDecoration(
-                              labelText: 'Old Female',
-                            ),
-                          ),
+                          child: Obx(() => TextFormField(
+                                keyboardType: TextInputType.number,
+                                controller: controller.inputControllers[5],
+                                decoration: InputDecoration(
+                                  labelText: 'Old Female',
+                                ),
+                              )),
                         ),
                       ],
                     ),
@@ -149,23 +171,23 @@ class _MyFormState extends State<MyForm> {
                     Row(
                       children: [
                         Expanded(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            controller: controller.inputControllers[6],
-                            decoration: InputDecoration(
-                              labelText: 'New Male',
-                            ),
-                          ),
+                          child: Obx(() => TextFormField(
+                                keyboardType: TextInputType.number,
+                                controller: controller.inputControllers[6],
+                                decoration: InputDecoration(
+                                  labelText: 'New Male',
+                                ),
+                              )),
                         ),
                         SizedBox(width: 16.0),
                         Expanded(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            controller: controller.inputControllers[7],
-                            decoration: InputDecoration(
-                              labelText: 'New Female',
-                            ),
-                          ),
+                          child: Obx(() => TextFormField(
+                                keyboardType: TextInputType.number,
+                                controller: controller.inputControllers[7],
+                                decoration: InputDecoration(
+                                  labelText: 'New Female',
+                                ),
+                              )),
                         ),
                       ],
                     ),
@@ -185,23 +207,23 @@ class _MyFormState extends State<MyForm> {
                     Row(
                       children: [
                         Expanded(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            controller: controller.inputControllers[8],
-                            decoration: InputDecoration(
-                              labelText: 'Old Male',
-                            ),
-                          ),
+                          child: Obx(() => TextFormField(
+                                keyboardType: TextInputType.number,
+                                controller: controller.inputControllers[8],
+                                decoration: InputDecoration(
+                                  labelText: 'Old Male',
+                                ),
+                              )),
                         ),
                         SizedBox(width: 16.0),
                         Expanded(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            controller: controller.inputControllers[9],
-                            decoration: InputDecoration(
-                              labelText: 'Old Female',
-                            ),
-                          ),
+                          child: Obx(() => TextFormField(
+                                keyboardType: TextInputType.number,
+                                controller: controller.inputControllers[9],
+                                decoration: InputDecoration(
+                                  labelText: 'Old Female',
+                                ),
+                              )),
                         ),
                       ],
                     ),
@@ -209,23 +231,23 @@ class _MyFormState extends State<MyForm> {
                     Row(
                       children: [
                         Expanded(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            controller: controller.inputControllers[10],
-                            decoration: InputDecoration(
-                              labelText: 'New Male',
-                            ),
-                          ),
+                          child: Obx(() => TextFormField(
+                                keyboardType: TextInputType.number,
+                                controller: controller.inputControllers[10],
+                                decoration: InputDecoration(
+                                  labelText: 'New Male',
+                                ),
+                              )),
                         ),
                         SizedBox(width: 16.0),
                         Expanded(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            controller: controller.inputControllers[11],
-                            decoration: InputDecoration(
-                              labelText: 'New Female',
-                            ),
-                          ),
+                          child: Obx(() => TextFormField(
+                                keyboardType: TextInputType.number,
+                                controller: controller.inputControllers[11],
+                                decoration: InputDecoration(
+                                  labelText: 'New Female',
+                                ),
+                              )),
                         ),
                       ],
                     ),
@@ -317,6 +339,14 @@ class _MyFormState extends State<MyForm> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _isLoading() {
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
       ),
     );
   }
