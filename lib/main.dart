@@ -1,8 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:medical_records/app_bindings.dart';
 import 'package:medical_records/controllers/theme_controller.dart';
+import 'package:medical_records/firebase_options.dart';
 import 'package:medical_records/routes/routes.dart';
 import 'package:medical_records/themes/themes.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -10,6 +12,10 @@ import 'package:url_strategy/url_strategy.dart';
 void main() async {
   await GetStorage.init();
   setPathUrlStrategy();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(App());
 }
 
@@ -25,7 +31,7 @@ class App extends StatelessWidget {
       darkTheme: Themes.darkTheme,
       themeMode: getThemeMode(themeController.theme),
       getPages: Routes.routes,
-      initialRoute: Routes.RECORDS,
+      initialRoute: Routes.WELCOME_SCREEN,
       initialBinding: AppBinding(),
     );
   }
