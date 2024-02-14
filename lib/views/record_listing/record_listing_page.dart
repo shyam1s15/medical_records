@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:medical_records/controllers/record_listing/record_listing_controller.dart';
@@ -20,6 +21,7 @@ class RecordListingPage extends GetView<RecordListingController> {
         return _build(context: context);
       },
       onLoading: _isLoading(),
+      onEmpty: _emptyListWidet(),
     );
   }
 
@@ -39,6 +41,41 @@ class RecordListingPage extends GetView<RecordListingController> {
       ),
     );
   }
+
+  
+  Widget _emptyListWidet() {
+    return Scaffold(
+        appBar: AppBar(title: Text('Ayush Medical Record System')),
+        body: SafeArea(
+        child: ListView(
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CustomButton(
+                  text: 'Add OPD',
+                  color: Colors.green,
+                  onPressed: () {
+                    Get.toNamed(Routes.INITIAL, arguments: {'new_opd': true});
+                  },
+                )
+              ],
+            ),
+            CachedNetworkImage(
+              imageUrl:
+                  'https://firebasestorage.googleapis.com/v0/b/sheraa-95d17.appspot.com/o/no-data-image.jpg?alt=media',
+              placeholder: (context, url) =>
+                  CircularProgressIndicator(), // Placeholder widget while loading
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              height: 250,
+              width: 250,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class RecordListingWidget extends StatelessWidget {
@@ -48,6 +85,16 @@ class RecordListingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /*return recordController.obx((state) {
+      if (state == null) {
+        return _isLoading();
+      }
+      return _build(context);
+    }, onLoading: _isLoading(), onEmpty: _emptyListWidet());*/
+    return _build(context);
+  }
+
+  Widget _build(BuildContext context) {
     return ListView(
       children: [
         Row(
@@ -55,12 +102,12 @@ class RecordListingWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             CustomButton(
-                  text: 'Add OPD',
-                  color: Colors.green,
-                  onPressed: () {
-                    Get.toNamed(Routes.INITIAL, arguments: {'new_opd': true});
-                  },
-                )
+              text: 'Add OPD',
+              color: Colors.green,
+              onPressed: () {
+                Get.toNamed(Routes.INITIAL, arguments: {'new_opd': true});
+              },
+            )
           ],
         ),
         SingleChildScrollView(
@@ -86,7 +133,7 @@ class RecordListingWidget extends StatelessWidget {
                   text: 'Action',
                   color: Colors.green,
                   onPressed: () {
-                    print(data.id);
+                    // print(data.id);
                     Get.toNamed(Routes.INITIAL, arguments: {'id': data.id});
                   },
                 )),
@@ -95,6 +142,14 @@ class RecordListingWidget extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _isLoading() {
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }

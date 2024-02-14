@@ -1,4 +1,3 @@
-
 class ResponseModel<T> {
   T content;
   ErrorInfo errorInfo;
@@ -11,11 +10,12 @@ class ResponseModel<T> {
     ErrorInfo errorInfo = ErrorInfo.fromJson(json['response']);
 
     dynamic parsedContent = null;
-
-    if (json['content'] is String) {
-      parsedContent = fromJson(json);
-    } else {
-      parsedContent = fromJson(json['content']);
+    if (json['content'] != null) {
+      if (json['content'] is String) {
+        parsedContent = fromJson(json);
+      } else {
+        parsedContent = fromJson(json['content']);
+      }
     }
     return ResponseModel<T>(
       content: parsedContent,

@@ -6,7 +6,7 @@ FutureOr<Request> requestInterceptor(request) async {
   print('requestInterceptor START /////////////////');
   print('               Method: ${request.method}');
   print('               Url: ${request.url}');
-  print('               Headers: ${request.headers}');
+  //print('               Headers: ${request.headers}');
   print('requestInterceptor END /////////////////');
 
   return request;

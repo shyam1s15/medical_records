@@ -28,13 +28,7 @@ class WelcomePage extends GetView<WelcomeController> {
                 ),
                 ElevatedButton.icon(
                   onPressed: () async {
-                    UserCredential? user = await signInWithGoogle();
-                    print(user?.user?.email);
-                    print(user?.user?.displayName);
-                    print(user?.user?.emailVerified);
-                    print(user?.credential?.accessToken);
-                    print(user?.credential?.token);
-                    //print(user?.credential.)
+                    controller.signInWithGoogle();
                   },
                   icon: Icon(Icons.login),
                   label: Text('Sign in with Google'),
@@ -43,24 +37,5 @@ class WelcomePage extends GetView<WelcomeController> {
             ),
           ),
         ));
-  }
-
-  Future<UserCredential?> signInWithGoogle() async {
-    try {
-      // Create a new provider
-      GoogleAuthProvider googleProvider = GoogleAuthProvider();
-
-      //googleProvider
-      //    .addScope('https://www.googleapis.com/auth/contacts.readonly');
-      googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
-
-      // Once signed in, return the UserCredential
-      return await FirebaseAuth.instance.signInWithPopup(googleProvider);
-    } catch (error) {
-      print('Error signing in with Google: $error');
-      return null;
-    }
-    // Or use signInWithRedirect
-    // return await FirebaseAuth.instance.signInWithRedirect(googleProvider);
   }
 }

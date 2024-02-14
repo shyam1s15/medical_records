@@ -17,13 +17,9 @@ class MedicalRepository {
 
   Future<ResponseModel<StringResponseModel>> saveRecord(
       MedicalRecordModel body) async {
-    print(body.toJson());
     ResponseModel<StringResponseModel> resp =
         await api.post<StringResponseModel>(StringResponseModel.fromJson,
             endpoint: ApiRequest.INSERT_UPDATE_RECORD_API, body: body.toJson());
-    print(resp.errorInfo.error);
-    print(resp.errorInfo.message);
-    print(resp.content);
     return resp;
   }
 

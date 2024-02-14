@@ -4,10 +4,12 @@ import 'package:medical_records/dtos/requestDtos/MedicalRecordModel.dart';
 import 'package:medical_records/dtos/responseDtos/string_response_dto.dart';
 import 'package:medical_records/models/response_model.dart';
 import 'package:medical_records/repositories/medical_repository.dart';
+import 'package:medical_records/routes/routes.dart';
 import 'package:medical_records/shared/utils/Utility.dart';
 import 'package:medical_records/shared/utils/date_utils.dart';
 import 'package:medical_records/shared/utils/object_utils.dart';
 import 'package:medical_records/shared/widgets/common_widgets.dart';
+import 'package:medical_records/views/record_listing/record_listing_page.dart';
 
 class HomeController extends GetxController with StateMixin {
   MedicalRepository medicalRepository = Get.find();
@@ -126,6 +128,8 @@ class HomeController extends GetxController with StateMixin {
       CommonWidgets.snackBar("error", apiResp.errorInfo.message);
     } else {
       CommonWidgets.showSuccessToast("Success", "Data Saved Successfully");
+      await Future.delayed(Duration(seconds: 1)); // Wait for 1 second
+      Get.offAllNamed(Routes.RECORDS);
     }
   }
 
@@ -151,7 +155,7 @@ class HomeController extends GetxController with StateMixin {
       recordId = apiResp.content.id;
       opdDate.value = DateUtil.appDateTimeFromString(apiResp.content.opdDate);
       apiResp.content.groups.forEach((record) {
-        print(record.name);
+        // print(record.name);
         if (Utility.equalIgnoreCase(record.name, "0-15 years")) {
           inputControllers[0].text = record.oldMale.toString();
           inputControllers[1].text = record.oldFemale.toString();
@@ -174,6 +178,6 @@ class HomeController extends GetxController with StateMixin {
   }
 
   void updateOpdDate(DateTime picked) {
-      opdDate.value = picked;
+    opdDate.value = picked;
   }
 }

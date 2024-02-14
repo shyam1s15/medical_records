@@ -6,11 +6,12 @@ import 'package:medical_records/app_bindings.dart';
 import 'package:medical_records/controllers/theme_controller.dart';
 import 'package:medical_records/firebase_options.dart';
 import 'package:medical_records/routes/routes.dart';
+import 'package:medical_records/services/app_preference_service.dart';
 import 'package:medical_records/themes/themes.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 void main() async {
-  await GetStorage.init();
+  AppPreferences.init();
   setPathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -33,6 +34,10 @@ class App extends StatelessWidget {
       getPages: Routes.routes,
       initialRoute: Routes.WELCOME_SCREEN,
       initialBinding: AppBinding(),
+      defaultTransition: Transition.fade,
+      opaqueRoute: Get.isOpaqueRouteDefault,
+      popGesture: Get.isPopGestureEnable,
+      transitionDuration: Get.defaultTransitionDuration,
     );
   }
 

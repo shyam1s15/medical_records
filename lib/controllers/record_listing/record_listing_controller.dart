@@ -18,7 +18,6 @@ class RecordListingController extends GetxController with StateMixin {
   }
 
   void fetchRecords() async {
-    print("called once");
     change(null, status: RxStatus.loading());
 
     int pageId = 0;
@@ -33,11 +32,18 @@ class RecordListingController extends GetxController with StateMixin {
         if (Utility.nonNullNonEmpty(apiResp.content.recordList)) {
           records.addAll(apiResp.content.recordList);
           pageId += 1;
+          if (apiResp.content.recordList.length < 20) {
+            break;
+          }
         } else {
           break;
         }
       }
     }
-    change(records, status: RxStatus.success());
+    if (Utility.nonNullNonEmpty(records)) {
+      change(records, status: RxStatus.success());
+    } else {
+      change(records, status: RxStatus.empty());
+    }
   }
 }

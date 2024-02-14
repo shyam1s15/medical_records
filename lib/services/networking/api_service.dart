@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:medical_records/dtos/requestDtos/MedicalRecordModel.dart';
 import 'package:medical_records/models/response_model.dart';
+import 'package:medical_records/services/app_preference_service.dart';
 import 'package:medical_records/services/networking/base_provider.dart';
 import 'package:medical_records/shared/typedef.dart';
 
@@ -42,7 +43,8 @@ class ApiService {
     var customHeaders = {
       'Accept': 'application/json',
       if (requiresAuthToken) 'Authorization': '',
-      'Access-Control-Allow-Origin': '*', // Allow requests from any origin
+      'user-token': AppPreferences.userToken ?? '',
+          'Access-Control-Allow-Origin': '*', // Allow requests from any origin
       'Access-Control-Allow-Methods':
           'OPTIONS, GET, PUT, POST, DELETE, OPTIONS', // Specify allowed methods
       'Access-Control-Allow-Headers':
