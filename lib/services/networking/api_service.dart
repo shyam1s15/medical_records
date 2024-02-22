@@ -10,6 +10,7 @@ import 'package:medical_records/services/networking/base_provider.dart';
 import 'package:medical_records/shared/typedef.dart';
 import 'dart:html' as html;
 import 'package:http/http.dart' as http;
+import 'package:medical_records/shared/utils/Utility.dart';
 
 class ApiService {
   final BaseProvider _baseProvider;
@@ -126,8 +127,8 @@ class ApiService {
     try {
       //final response = await _baseProvider.post(endpoint, body,
       //   headers: customHeaders, query: query);
-      final response =
-          await http.post(Uri.parse(endpoint), headers: customHeaders, body: jsonEncode(body));
+      final response = await http.post(Uri.parse(endpoint),
+          headers: customHeaders, body: jsonEncode(body));
 
       // print(response.bodyString);
       // List<int>? bytes = await response.bodyBytes?.fold<List<int>>(
@@ -145,12 +146,15 @@ class ApiService {
       // }
 
       if (response.statusCode == 200) {
+        String fileName = body?['opd_date'] ?? "output";
+        fileName += ".xlsx";
+        
         final blob = html.Blob([response.bodyBytes]);
         final url = html.Url.createObjectUrlFromBlob(blob);
         final anchor = html.document.createElement('a') as html.AnchorElement
           ..href = url
           ..style.display = 'none'
-          ..download = "output.xlsx";
+          ..download = fileName;
         html.document.body!.children.add(anchor);
 
         anchor.click();
