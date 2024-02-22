@@ -1,10 +1,15 @@
-import 'dart:convert';
+import 'dart:convert' show jsonEncode, utf8;
+import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:file_saver/file_saver.dart';
 import 'package:medical_records/dtos/requestDtos/MedicalRecordModel.dart';
 import 'package:medical_records/models/response_model.dart';
 import 'package:medical_records/services/app_preference_service.dart';
 import 'package:medical_records/services/networking/base_provider.dart';
 import 'package:medical_records/shared/typedef.dart';
+import 'dart:html' as html;
+import 'package:http/http.dart' as http;
 
 class ApiService {
   final BaseProvider _baseProvider;
@@ -44,7 +49,7 @@ class ApiService {
       'Accept': 'application/json',
       if (requiresAuthToken) 'Authorization': '',
       'user-token': AppPreferences.userToken ?? '',
-          'Access-Control-Allow-Origin': '*', // Allow requests from any origin
+      'Access-Control-Allow-Origin': '*', // Allow requests from any origin
       'Access-Control-Allow-Methods':
           'OPTIONS, GET, PUT, POST, DELETE, OPTIONS', // Specify allowed methods
       'Access-Control-Allow-Headers':
@@ -106,5 +111,55 @@ class ApiService {
         headers: customHeaders, query: query);
 
     return response.body;
+  }
+
+  Future<void> downloadAndSaveExcel({
+    required String endpoint,
+    JSON? body,
+    JSON? query,
+  }) async {
+    var customHeaders = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'user-token': AppPreferences.userToken ?? '',
+    };
+    try {
+      //final response = await _baseProvider.post(endpoint, body,
+      //   headers: customHeaders, query: query);
+      final response =
+          await http.post(Uri.parse(endpoint), headers: customHeaders, body: jsonEncode(body));
+
+      // print(response.bodyString);
+      // List<int>? bytes = await response.bodyBytes?.fold<List<int>>(
+      //   <int>[],
+      //   (previous, element) => previous..addAll(element),
+      // );
+      // utf8.decode(response.bodyString!.runes.toList())
+
+      //   Uint8List excelData = utf8.encode(response.bodyString!) as Uint8List;
+
+      //   FileSaver.instance.saveFile(
+      //       bytes: excelData,
+      //       mimeType: MimeType.openDocSheets,
+      //       name: 'example.xlsx');
+      // }
+
+      if (response.statusCode == 200) {
+        final blob = html.Blob([response.bodyBytes]);
+        final url = html.Url.createObjectUrlFromBlob(blob);
+        final anchor = html.document.createElement('a') as html.AnchorElement
+          ..href = url
+          ..style.display = 'none'
+          ..download = "output.xlsx";
+        html.document.body!.children.add(anchor);
+
+        anchor.click();
+
+        html.document.body!.children.remove(anchor);
+        html.Url.revokeObjectUrl(url);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }

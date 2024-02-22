@@ -5,6 +5,8 @@ import 'package:medical_records/dtos/responseDtos/string_response_dto.dart';
 import 'package:medical_records/models/response_model.dart';
 import 'package:medical_records/services/api_request.dart';
 import 'package:medical_records/services/networking/api_service.dart';
+import 'package:medical_records/shared/typedef.dart';
+import 'package:medical_records/shared/utils/date_utils.dart';
 
 class MedicalRepository {
   final ApiService api;
@@ -42,5 +44,10 @@ class MedicalRepository {
         body: {'id': receivedID},
         endpoint: ApiRequest.DETAIL_RECORD_API);
     return resp;
+  }
+
+  Future<void> downloadExcel(DateTime dateTime) async {
+    JSON body = {'opd_date': DateUtil.appBackendDate(dateTime)};
+    await api.downloadAndSaveExcel(endpoint: ApiRequest.DOWNLOAD_EXCEL, body: body);
   }
 }

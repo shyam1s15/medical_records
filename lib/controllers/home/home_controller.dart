@@ -154,6 +154,7 @@ class HomeController extends GetxController with StateMixin {
     } else {
       recordId = apiResp.content.id;
       opdDate.value = DateUtil.appDateTimeFromString(apiResp.content.opdDate);
+      opdSelected.value = Utility.getOpdTypeInString(apiResp.content.opdType);
       apiResp.content.groups.forEach((record) {
         // print(record.name);
         if (Utility.equalIgnoreCase(record.name, "0-15 years")) {

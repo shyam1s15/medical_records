@@ -3,13 +3,16 @@ import 'package:medical_records/dtos/requestDtos/page_dto.dart';
 import 'package:medical_records/dtos/responseDtos/record_listing_dto.dart';
 import 'package:medical_records/models/response_model.dart';
 import 'package:medical_records/repositories/medical_repository.dart';
+import 'package:medical_records/shared/typedef.dart';
 import 'package:medical_records/shared/utils/Utility.dart';
+import 'package:medical_records/shared/utils/date_utils.dart';
 import 'package:medical_records/shared/widgets/common_widgets.dart';
 
 class RecordListingController extends GetxController with StateMixin {
   MedicalRepository medicalRepository = Get.find();
   var records = <RecordListingModel>[].obs;
   var currentPage = 0.obs;
+  Rx<DateTime> currentMonthDate = Rx<DateTime>(DateTime.now());
 
   @override
   void onInit() {
@@ -45,5 +48,12 @@ class RecordListingController extends GetxController with StateMixin {
     } else {
       change(records, status: RxStatus.empty());
     }
+  }
+
+  void updatedMonth(int month, int year) async {
+    DateTime dateTime = DateTime(year, month, 1);
+    currentMonthDate.value = dateTime;
+
+    await medicalRepository.downloadExcel(dateTime);
   }
 }

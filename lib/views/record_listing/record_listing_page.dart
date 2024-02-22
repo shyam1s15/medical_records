@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_month_picker/flutter_custom_month_picker.dart';
 import 'package:get/get.dart';
 import 'package:medical_records/controllers/record_listing/record_listing_controller.dart';
 import 'package:medical_records/routes/routes.dart';
@@ -42,11 +43,10 @@ class RecordListingPage extends GetView<RecordListingController> {
     );
   }
 
-  
   Widget _emptyListWidet() {
     return Scaffold(
-        appBar: AppBar(title: Text('Ayush Medical Record System')),
-        body: SafeArea(
+      appBar: AppBar(title: Text('Ayush Medical Record System')),
+      body: SafeArea(
         child: ListView(
           children: [
             Row(
@@ -99,8 +99,13 @@ class RecordListingWidget extends StatelessWidget {
       children: [
         Row(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            CustomButton(
+              text: 'Export',
+              color: Colors.green,
+              onPressed: () => _selectMonth(context),
+            ),
             CustomButton(
               text: 'Add OPD',
               color: Colors.green,
@@ -125,12 +130,12 @@ class RecordListingWidget extends StatelessWidget {
             ],
             rows: recordController.records.map((data) {
               return DataRow(cells: [
-                DataCell(Text('${Utility.appDisplayDate(data.opd_date)}')),
-                DataCell(Text('${data.id}')),
+                DataCell(Text(Utility.appDisplayDate(data.opd_date))),
+                DataCell(Text(Utility.getOpdTypeInString(data.opd_type))),
                 DataCell(Text('${data.old_total}')),
                 DataCell(Text('${data.new_total}')),
                 DataCell(CustomButton(
-                  text: 'Action',
+                  text: 'Edit',
                   color: Colors.green,
                   onPressed: () {
                     // print(data.id);
@@ -150,6 +155,24 @@ class RecordListingWidget extends StatelessWidget {
       body: Center(
         child: CircularProgressIndicator(),
       ),
+    );
+  }
+
+  Future<void> _selectMonth(BuildContext context) async {
+    showMonthPicker(
+      context,
+      onSelected: (month, year) {
+        recordController.updatedMonth(month, year);
+      },
+      initialSelectedMonth: DateTime.now().month,
+      initialSelectedYear: DateTime.now().year,
+      // firstEnabledMonth: 3,
+      // lastEnabledMonth: 10,
+      firstYear: 2023,
+      //  lastYear: DateTime.now().year,
+      selectButtonText: 'OK',
+      cancelButtonText: 'Cancel',
+      textColor: Colors.white,
     );
   }
 }

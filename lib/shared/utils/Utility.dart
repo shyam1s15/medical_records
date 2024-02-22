@@ -18,7 +18,17 @@ class Utility {
     String day = dateTime.day.toString().padLeft(2, '0');
     String month = dateTime.month.toString().padLeft(2, '0');
     String year = dateTime.year.toString();
-    
+
     return '$day/ $month/ $year';
+  }
+
+  static String getOpdTypeInString(int findKey) {
+    Map<String, int> map = {
+      'Full Opd': 0,
+      'Half Opd': 1,
+      'No Opd': 2,
+    };
+    return map.keys
+        .firstWhere((key) => map[key] == findKey, orElse: () => 'Full Opd');
   }
 }
