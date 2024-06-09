@@ -15,15 +15,18 @@ class RecordListingPage extends GetView<RecordListingController> {
     //controller.fetchRecords();
 
     return controller.obx(
-      (state) {
-        if (state == null) {
-          return _isLoading();
-        }
-        return _build(context: context);
-      },
-      onLoading: _isLoading(),
-      onEmpty: _emptyListWidet(),
-    );
+        (state) {
+          if (state == null) {
+            return _isLoading();
+          }
+          return _build(context: context);
+        },
+        onLoading: _isLoading(),
+        onEmpty: _emptyListWidet(),
+        onError: (error) {
+          print(error);
+          return _emptyListWidet();
+        });
   }
 
   Widget _build({required BuildContext context}) {

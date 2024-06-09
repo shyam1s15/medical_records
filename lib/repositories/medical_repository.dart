@@ -25,14 +25,14 @@ class MedicalRepository {
     return resp;
   }
 
-  Future<ResponseModel<RecordListingGroupModel>> fetchRecords(
+  Future<ResponseModel<RecordListingGroupModel?>> fetchRecords(
       PageModel? body) async {
     if (body == null) {
       body = new PageModel(page: new PageInfoModel(pageId: 0));
     }
 
-    ResponseModel<RecordListingGroupModel> resp = await api
-        .post<RecordListingGroupModel>(RecordListingGroupModel.fromJson,
+    ResponseModel<RecordListingGroupModel?> resp = await api
+        .post<RecordListingGroupModel?>(RecordListingGroupModel.fromJson,
             endpoint: ApiRequest.FETCH_RECORDS_API, body: body.toJson());
     return resp;
   }

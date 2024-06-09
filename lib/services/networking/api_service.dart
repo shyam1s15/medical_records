@@ -49,12 +49,7 @@ class ApiService {
     var customHeaders = {
       'Accept': 'application/json',
       if (requiresAuthToken) 'Authorization': '',
-      'user-token': AppPreferences.userToken ?? '',
-      'Access-Control-Allow-Origin': '*', // Allow requests from any origin
-      'Access-Control-Allow-Methods':
-          'OPTIONS, GET, PUT, POST, DELETE, OPTIONS', // Specify allowed methods
-      'Access-Control-Allow-Headers':
-          'Content-Type, Authorization', // Specify allowed request headers
+      'user-token': AppPreferences.userToken ?? ''
     };
 
     if (headers != null) {
@@ -66,6 +61,7 @@ class ApiService {
     //dynamic responseBody = json.decode(response.body);
 
     // return response.body;
+    print(response.bodyString);
     ResponseModel<T> apiResp = ResponseModel.fromJson(response.body, fromJson);
     return apiResp;
   }
@@ -148,7 +144,7 @@ class ApiService {
       if (response.statusCode == 200) {
         String fileName = body?['opd_date'] ?? "output";
         fileName += ".xlsx";
-        
+
         final blob = html.Blob([response.bodyBytes]);
         final url = html.Url.createObjectUrlFromBlob(blob);
         final anchor = html.document.createElement('a') as html.AnchorElement
