@@ -1,12 +1,8 @@
 {
   "hosting": {
     "public": "build/web",
-    "site": "gujarat-medical-records.web.app",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "site": "gujarat-medical-records",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",
