@@ -76,22 +76,22 @@ class Themes {
         fontWeight: FontWeight.w500
       ),
       titleSmall: TextStyle(
-        color: Colors.grey.shade700,
+        color: Colors.black,
         fontSize: 16,
         fontWeight: FontWeight.w400
       ),
       bodyLarge: TextStyle(
-        color: Colors.grey.shade600,
+        color: Colors.black,
         fontSize: 14,
         fontWeight: FontWeight.w400
       ),
       bodyMedium: TextStyle(
-        color: Colors.white,
+        color: Colors.black,
         fontSize: 14,
         fontWeight: FontWeight.w600
       ),
       bodySmall: TextStyle(
-        color: Colors.grey.shade800,
+        color: Colors.black,
         fontSize: 12,
         fontWeight: FontWeight.w400
       ),
@@ -126,62 +126,63 @@ class Themes {
         fontSize: 14,
       )
     ),
-    progressIndicatorTheme: ProgressIndicatorThemeData(
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: Colors.white
     ),
     textTheme: TextTheme(
       displayLarge: TextStyle(
         letterSpacing: -1.5,
         fontSize: 48,
-        color: Colors.black,
+        color: Colors.white,
         fontWeight: FontWeight.bold
       ),
       displayMedium: TextStyle(
         letterSpacing: -1.0,
         fontSize: 40,
-        color: Colors.black,
+        color: Colors.white,
         fontWeight: FontWeight.bold
       ),
       displaySmall: TextStyle(
         letterSpacing: -1.0,
         fontSize: 32,
-        color: Colors.black,
+        color: Colors.white,
         fontWeight: FontWeight.bold
       ),
       headlineLarge: TextStyle(
         letterSpacing: -1.0,
-        color: Colors.black,
+        color: Colors.white,
         fontSize: 28,
         fontWeight: FontWeight.w600
       ),
       headlineMedium: TextStyle(
         letterSpacing: -1.0,
-        color: Colors.black,
+        color: Colors.white,
         fontSize: 24,
         fontWeight: FontWeight.w500
       ),
       headlineSmall: TextStyle(
-        color: Colors.black,
+        color: Colors.white,
         fontSize: 18,
         fontWeight: FontWeight.w500
       ),
       titleLarge: TextStyle(
-        color: Colors.black,
+        color: Colors.white,
         fontSize: 16,
         fontWeight: FontWeight.w500
       ),
       titleMedium: TextStyle(
-        color: Colors.black,
+        color: Colors.white,
         fontSize: 14,
         fontWeight: FontWeight.w500
       ),
       titleSmall: TextStyle(
-        color: Colors.grey.shade700,
+        color: Colors.white,
         fontSize: 16,
         fontWeight: FontWeight.w400
       ),
       bodyLarge: TextStyle(
-        color: Colors.grey.shade600,
+        // color: Colors.grey.shade600,
+        color: Colors.white,
         fontSize: 14,
         fontWeight: FontWeight.w400
       ),
@@ -191,7 +192,8 @@ class Themes {
         fontWeight: FontWeight.w600
       ),
       bodySmall: TextStyle(
-        color: Colors.grey.shade800,
+        // color: Colors.grey.shade800,
+        color: Colors.white,
         fontSize: 12,
         fontWeight: FontWeight.w400
       ),

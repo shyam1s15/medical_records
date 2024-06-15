@@ -133,7 +133,7 @@ class RecordListingWidget extends StatelessWidget {
             ],
             rows: recordController.records.map((data) {
               return DataRow(cells: [
-                DataCell(Text(Utility.appDisplayDate(data.opd_date))),
+                DataCell(Text(Utility.appDisplayDate(data.opd_date),)),
                 DataCell(Text(Utility.getOpdTypeInString(data.opd_type))),
                 DataCell(Text('${data.old_total}')),
                 DataCell(Text('${data.new_total}')),
