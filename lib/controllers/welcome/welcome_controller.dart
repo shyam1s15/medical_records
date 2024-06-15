@@ -7,6 +7,16 @@ class WelcomeController extends GetxController {
   void signInWithGoogle() async {
     try {
       // Create a new provider
+      FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+        if (user == null || AppPreferences.userToken == null) {
+          print('User is currently signed out!');
+        } else {
+          AppPreferences.userToken = await user.getIdToken();
+          Get.toNamed(Routes.RECORDS);
+          return;
+        }
+      });
+
       GoogleAuthProvider googleProvider = GoogleAuthProvider();
 
       //googleProvider
