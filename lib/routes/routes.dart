@@ -39,6 +39,8 @@ class Routes {
         page: () => RecordListingPage(),
         binding: RecordListingBinding(),
         middlewares: [PlatformMiddleware(priority: 0)]),
-    GetPage(name: WELCOME_SCREEN, page: () => WelcomePage(), binding: WelcomeBinding())
+    GetPage(name: WELCOME_SCREEN, page: () => WelcomePage(), binding: WelcomeBinding(), 
+        middlewares: [PlatformMiddleware(priority: 0)]
+    )
   ];
 }
