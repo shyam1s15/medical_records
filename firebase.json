@@ -1,6 +1,7 @@
 {
   "hosting": {
     "public": "build/web",
+    "site": "gujarat-medical-records.web.app",
     "ignore": [
       "firebase.json",
       "**/.*",
