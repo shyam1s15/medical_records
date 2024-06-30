@@ -15,13 +15,17 @@ class PlatformMiddleware extends GetMiddleware {
   RouteSettings? redirect(String? route) {
     print(route);
     // print((route != Routes.WELCOME_SCREEN));
-    print(AppPreferences.userToken ?? "");
+    // print(AppPreferences.userToken ?? "");
     if (GetPlatform.isMobile || Get.width < 500) {
       bool isUserSignedIn = true;
       FirebaseAuth.instance.authStateChanges().listen((User? user) {
+        print(user?.displayName ?? "");
+        updateUserToken(user);
         if (user == null || AppPreferences.userToken == null) {
           print('User is currently signed out!');
           isUserSignedIn = false;
+        } else {
+          isUserSignedIn = true;
         }
       });
       if (!isUserSignedIn) {
@@ -30,5 +34,9 @@ class PlatformMiddleware extends GetMiddleware {
     } else {
       return RouteSettings(name: Routes.NOT_FOUND);
     }
+  }
+
+  void updateUserToken(User? user) async {
+    AppPreferences.userToken = await user?.getIdToken();
   }
 }

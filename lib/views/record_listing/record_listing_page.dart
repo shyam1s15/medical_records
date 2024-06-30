@@ -33,9 +33,10 @@ class RecordListingPage extends GetView<RecordListingController> {
     return Scaffold(
         appBar: AppBar(title: Text('Ayush Medical Record System')),
         body: SafeArea(
-            child: RecordListingWidget(
-          recordController: controller,
-        )));
+            //     child: RecordListingWidget(
+            //   recordController: controller,
+            // )));
+            child: RecordListingWidgetV2()));
   }
 
   Widget _isLoading() {
@@ -133,7 +134,9 @@ class RecordListingWidget extends StatelessWidget {
             ],
             rows: recordController.records.map((data) {
               return DataRow(cells: [
-                DataCell(Text(Utility.appDisplayDate(data.opd_date),)),
+                DataCell(Text(
+                  Utility.appDisplayDate(data.opd_date),
+                )),
                 DataCell(Text(Utility.getOpdTypeInString(data.opd_type))),
                 DataCell(Text('${data.old_total}')),
                 DataCell(Text('${data.new_total}')),
@@ -159,6 +162,164 @@ class RecordListingWidget extends StatelessWidget {
         child: CircularProgressIndicator(),
       ),
     );
+  }
+
+  Future<void> _selectMonth(BuildContext context) async {
+    showMonthPicker(
+      context,
+      onSelected: (month, year) {
+        recordController.updatedMonth(month, year);
+      },
+      initialSelectedMonth: DateTime.now().month,
+      initialSelectedYear: DateTime.now().year,
+      // firstEnabledMonth: 3,
+      // lastEnabledMonth: 10,
+      firstYear: 2023,
+      //  lastYear: DateTime.now().year,
+      selectButtonText: 'OK',
+      cancelButtonText: 'Cancel',
+      textColor: Colors.white,
+    );
+  }
+}
+
+class RecordListingWidgetV2 extends StatefulWidget {
+  RecordListingWidgetV2({super.key});
+
+  @override
+  State<RecordListingWidgetV2> createState() => _RecordListingWidgetV2State();
+}
+
+class _RecordListingWidgetV2State extends State<RecordListingWidgetV2> {
+  final RecordListingController recordController =
+      Get.put(RecordListingController());
+  final ScrollController _scrollController = ScrollController();
+  int _currentPage = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    print('hii init');
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        recordController.fetchRecordsV2();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return recordController.obx((state) {
+      return Column(
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              CustomButton(
+                text: 'Export',
+                color: Colors.green,
+                onPressed: () => _selectMonth(context),
+              ),
+              CustomButton(
+                text: 'Add OPD',
+                color: Colors.green,
+                onPressed: () {
+                  Get.toNamed(Routes.INITIAL, arguments: {'new_opd': true});
+                },
+              )
+            ],
+          ),
+          SizedBox(height: 10,),
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                width:
+                    600, // Adjust this value to control the width of your table
+                child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: recordController.records.length +
+                      (recordController.isLoading.value ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (index == recordController.records.length) {
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                    var data = recordController.records[index];
+                    return Column(
+                      children: [
+                        if (index == 0)
+                          const Row(children: [
+                            Expanded(
+                              child: Text('Date'),
+                            ),
+                            Expanded(
+                              child: Text('OPD Type'),
+                            ),
+                            Expanded(
+                              child: Text('Old Total'),
+                            ),
+                            Expanded(
+                              child: Text('New Total'),
+                            ),
+                            Expanded(
+                              child: Text('Action'),
+                            ),
+                          ]),
+                        Row(
+                          children: [
+                            Expanded(
+                              child:
+                                  Text(Utility.appDisplayDate(data.opd_date)),
+                            ),
+                            Expanded(
+                              child: Text(
+                                  Utility.getOpdTypeInString(data.opd_type)),
+                            ),
+                            Expanded(
+                              child: Text('${data.old_total}'),
+                            ),
+                            Expanded(
+                              child: Text('${data.new_total}'),
+                            ),
+                            Container(
+                              width: 100,
+                              child: CustomButton(
+                                text: 'Edit',
+                                color: Colors.green,
+                                onPressed: () {
+                                  Get.toNamed(Routes.INITIAL,
+                                      arguments: {'id': data.id});
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        Divider(), // Horizontal divider
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    });
   }
 
   Future<void> _selectMonth(BuildContext context) async {

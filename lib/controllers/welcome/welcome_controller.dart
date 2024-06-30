@@ -8,7 +8,7 @@ class WelcomeController extends GetxController {
     try {
       // Create a new provider
       FirebaseAuth.instance.authStateChanges().listen((User? user) async {
-        if (user == null || AppPreferences.userToken == null) {
+        if (user == null || AppPreferences.userToken == null || user.emailVerified == false) {
           print('User is currently signed out!');
         } else {
           AppPreferences.userToken = await user.getIdToken();
