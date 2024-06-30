@@ -238,7 +238,9 @@ class _RecordListingWidgetV2State extends State<RecordListingWidgetV2> {
               )
             ],
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -246,74 +248,74 @@ class _RecordListingWidgetV2State extends State<RecordListingWidgetV2> {
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 width:
                     600, // Adjust this value to control the width of your table
-                child: ListView.builder(
-                  controller: _scrollController,
-                  itemCount: recordController.records.length +
-                      (recordController.isLoading.value ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index == recordController.records.length) {
-                      return Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    }
-                    var data = recordController.records[index];
-                    return Column(
-                      children: [
-                        if (index == 0)
-                          const Row(children: [
-                            Expanded(
-                              child: Text('Date'),
+                child: Obx(() => ListView.builder(
+                      controller: _scrollController,
+                      itemCount: recordController.records.length +
+                          (recordController.isLoading.value ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        if (index == recordController.records.length) {
+                          return Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CircularProgressIndicator(),
                             ),
-                            Expanded(
-                              child: Text('OPD Type'),
-                            ),
-                            Expanded(
-                              child: Text('Old Total'),
-                            ),
-                            Expanded(
-                              child: Text('New Total'),
-                            ),
-                            Expanded(
-                              child: Text('Action'),
-                            ),
-                          ]),
-                        Row(
+                          );
+                        }
+                        var data = recordController.records[index];
+                        return Column(
                           children: [
-                            Expanded(
-                              child:
-                                  Text(Utility.appDisplayDate(data.opd_date)),
+                            if (index == 0)
+                              const Row(children: [
+                                Expanded(
+                                  child: Text('Date'),
+                                ),
+                                Expanded(
+                                  child: Text('OPD Type'),
+                                ),
+                                Expanded(
+                                  child: Text('Old Total'),
+                                ),
+                                Expanded(
+                                  child: Text('New Total'),
+                                ),
+                                Expanded(
+                                  child: Text('Action'),
+                                ),
+                              ]),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                      Utility.appDisplayDate(data.opd_date)),
+                                ),
+                                Expanded(
+                                  child: Text(Utility.getOpdTypeInString(
+                                      data.opd_type)),
+                                ),
+                                Expanded(
+                                  child: Text('${data.old_total}'),
+                                ),
+                                Expanded(
+                                  child: Text('${data.new_total}'),
+                                ),
+                                Container(
+                                  width: 100,
+                                  child: CustomButton(
+                                    text: 'Edit',
+                                    color: Colors.green,
+                                    onPressed: () {
+                                      Get.toNamed(Routes.INITIAL,
+                                          arguments: {'id': data.id});
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
-                            Expanded(
-                              child: Text(
-                                  Utility.getOpdTypeInString(data.opd_type)),
-                            ),
-                            Expanded(
-                              child: Text('${data.old_total}'),
-                            ),
-                            Expanded(
-                              child: Text('${data.new_total}'),
-                            ),
-                            Container(
-                              width: 100,
-                              child: CustomButton(
-                                text: 'Edit',
-                                color: Colors.green,
-                                onPressed: () {
-                                  Get.toNamed(Routes.INITIAL,
-                                      arguments: {'id': data.id});
-                                },
-                              ),
-                            ),
+                            Divider(), // Horizontal divider
                           ],
-                        ),
-                        Divider(), // Horizontal divider
-                      ],
-                    );
-                  },
-                ),
+                        );
+                      },
+                    )),
               ),
             ),
           ),
